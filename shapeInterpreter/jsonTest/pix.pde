@@ -2,7 +2,11 @@
 class pix {
   int index, x, y;
   float r, g, b;
-
+  
+  pix(){
+    
+  }
+  
   pix (int id, int x, int y, float r, float g, float b) {
     index = id;
     this.x = x;
