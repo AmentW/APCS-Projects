@@ -1,9 +1,13 @@
-class pix {
+
+
+class pix implements Comparable<pix> {
   int index, x, y, type;
   float r, g, b;
 
+  pix () {
+  }
   pix (int id, int x, int y, int type, float r, float g, float b) {
-    index = id;
+    this.index = id;
     this.x = x;
     this.y = y;
     this.type = type;
@@ -11,33 +15,42 @@ class pix {
     this.g = g;
     this.b = b;
   }
+  int compareTo( pix other) {
+    if (this.index > other.index) {
+      return 1;
+    } else if (this.index < other.index) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
   int getID() {
-    return index;
+    return this.index;
   }
   int getX() {
-    return x;
+    return this.x;
   }
   int getY() {
-    return y;
+    return this.y;
   }
   int getType() {
-    return type;
+    return this.type;
   }
   int getColor() {
     return (int) (r + g + b)/3;
   }
   int getRed() {
-    return (int) r;
+    return (int) this.r;
   }
   int getGreen() {
-    return (int) g;
+    return (int) this.g;
   }
   int getBlue() {
-    return (int) b;
+    return (int) this.b;
   }
   void filter() {
     int filter = getColor();
-    if (filter < 100) {
+    if (filter <= 100) {
       r = 0;
       g = 0;
       b = 0;

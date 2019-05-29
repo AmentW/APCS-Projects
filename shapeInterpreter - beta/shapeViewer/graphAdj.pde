@@ -7,17 +7,18 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-pix pyx = new pix();
 class graphAdj {
-  ArrayList <pix> allPixels;
-  ArrayList <pix> colorPixels;
-  Map <pix, ArrayList <pix>> adjList = new HashMap <pix, ArrayList<pix>>();
+  ArrayList <pix> allPixels = new ArrayList <pix> ();
+  ArrayList <pix> colorPixels = new ArrayList <pix> ();
+  Map <pix, ArrayList <pix>> adjList = new TreeMap <pix, ArrayList<pix>>();
   boolean oneTime = true;
-  Map <Integer, Integer> copy = new HashMap<Integer, Integer>();
+  Map <Integer, Integer> copy = new TreeMap<Integer, Integer>();
 
   void loadData(ArrayList all, ArrayList colored) {
-    allPixels = new ArrayList <pix> (all);
-    colorPixels = new ArrayList <pix> (colored);
+    allPixels.clear();
+    colorPixels.clear();
+    allPixels.addAll(all);
+    colorPixels.addAll(colored);
   }
 
   void createMap() {
@@ -54,7 +55,9 @@ class graphAdj {
   }
 
   Map <Integer, Integer> findCorner(int type) {
-    Map <Integer, Integer> corner = new HashMap <Integer, Integer>();
+    Map <Integer, Integer> corner = new TreeMap <Integer, Integer>();
+    corner.clear();
+    copy.clear();
     for (pix p : adjList.keySet()) {
       int black = 0;
       int colored = 0;
@@ -69,26 +72,22 @@ class graphAdj {
         }
       }    
       if (type == 0) {
-        if ( ((colored == 1 || colored == 2 || colored == 3) && (black == 5 || black == 6 || black == 7))) {
+        if ( (p.getColor() > 100) && (((colored == 1 || colored == 2 || colored == 3) && (black == 5 || black == 6 || black == 7)))) {
           int x = p.getX();
           int y = p.getY();
           corner.put(x, y);
         }
       }
       if (type == 1) {
-        if ( ((colored == 3) && (black == 4)) || (colored == 2 && black == 5) || ((colored == 1 || colored == 2) && black == 6)) {
+        if ( (p.getColor() > 100) && (((colored == 3) && (black == 4)) || (colored == 2 && black == 5) || ((colored == 1 || colored == 2) && black == 6))) {
           int x = p.getX();
           int y = p.getY();
           corner.put(x, y);
         }
       }
+      println(p.getX() + "  " + p.getY() + "  " +p.getID() + "  " + p.getColor());
     }
-    if (oneTime) {
-      copy.putAll(corner);
-      oneTime = false;
-      println(copy);
-    }
-
+    copy.putAll(corner);
     int count = 0;
     for (Map.Entry<Integer, Integer> entry : copy.entrySet()) {
       for (Map.Entry<Integer, Integer> check : copy.entrySet()) {
@@ -96,7 +95,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -104,7 +103,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -112,7 +111,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -120,7 +119,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -128,7 +127,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -136,7 +135,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -144,7 +143,7 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
@@ -152,12 +151,13 @@ class graphAdj {
           count++;
           if (count%2 == 0) {
             corner.remove(entry.getKey(), entry.getValue());
-            println(entry.getKey() + "   " + check.getKey());
+            //println(entry.getKey() + "   " + check.getKey());
             count = 0;
           }
         }
       }
     }
+
     return corner;
   }
 

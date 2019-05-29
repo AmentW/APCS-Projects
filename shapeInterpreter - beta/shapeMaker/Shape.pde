@@ -62,7 +62,7 @@ class Shape {
     }
   }
 
-  void makeJSON() {
+  void makeJSON(int shapeType) {
     shape = new JSONArray();
     int xloc = 0;
     int yloc = 0;
@@ -83,7 +83,6 @@ class Shape {
       xloc++;
       shape.setJSONObject(i, pixel);
     }
-
     allShapes.setJSONArray(index, shape);
     index++;
     done = true;
@@ -94,8 +93,8 @@ class Shape {
   }
 
   void saveJSON() {
-    saveJSONArray(allShapes, "C:/Users/will/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
-    //saveJSONArray(allShapes, "/Users/763791/Desktop/shapeInterpreter/shapeViewer/data/pixelData.json");
+    //saveJSONArray(allShapes, "C:/Users/will/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
+    saveJSONArray(allShapes, "/Users/763791/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
     println(allShapes.size());
   }
 

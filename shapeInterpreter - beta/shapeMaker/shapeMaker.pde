@@ -3,8 +3,8 @@ float y1, y2, y3, y4, y5;
 float r, g, b;
 Shape shape = new Shape();
 char lastKey;
-int shapeType;
 int numShapes = 5;
+int shapeType;
 
 
 void setup() {
@@ -33,13 +33,15 @@ void draw() {
         generateTriangle(); 
         background(0);
         shape.makeTriangle(x1, x2, x3, y1, y2, y3);
+        shapeType = 0;
       } else {
         generateQuadrilateral();       
         background(0);
         shape.makeQuadrilateral(x1, x2, x3, x4, y1, y2, y3, y4);
+        shapeType = 1;
       }
       loadPixels();
-      shape.makeJSON();
+      shape.makeJSON(shapeType);
     }
   }
   if (shape.allShapes() == numShapes) {
@@ -69,7 +71,6 @@ void draw() {
 void generateTriangle() {
   //if (key == 't') {
   //  lastKey = 't';
-  shapeType = 0;
   int rand =  (int) random(6);
   //println(rand);
   if (rand == 0) {
@@ -127,7 +128,6 @@ void generateTriangle() {
 void generateQuadrilateral() {
   //if (key == 'q') {
   //  lastKey = 'q';
-  shapeType = 1;
   int rand =  (int) random(4);
   //println(rand);
 

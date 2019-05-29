@@ -15,16 +15,19 @@ ArrayList <pix> colored = new ArrayList <pix>();
 ArrayList <Integer> xS;
 ArrayList <Integer> yS;
 Queue <ArrayList> collectedShapes = new LinkedList <ArrayList>();
+ArrayList <pix> temp = new ArrayList <pix>();
 float duplicates = 0;
 int X = 2, Y = 12;
 int type;
 int count = 0;
+boolean pass = true;
+String runtime = "";
 
 void setup() {
   size(600, 620);
   background(50);
-  //shapeArray = loadJSONArray("/Users/763791/Desktop/shapeInterpreter/shapeViewer/data/pixelData.json");
-  shapeArray = loadJSONArray("C:/Users/will/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
+  shapeArray = loadJSONArray("/Users/763791/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
+  //shapeArray = loadJSONArray("C:/Users/will/Desktop/shapeInterpreter - beta/shapeViewer/data/pixelData.json");
 
   for (int k = 0; k< shapeArray.size(); k++) {
     JSONArray values = shapeArray.getJSONArray(k);
@@ -47,35 +50,64 @@ void setup() {
 
 void draw() {
   drawCoord();
-  vizShape();
   //println(list.get(398).getRed() + "  " +list.get(398).getGreen() + "  " + list.get(398).getBlue());
-  if (frameCount == 180) {
-    coloredData();
-    graph.loadData(list, colored); //make the "list" argument run off of "collectedShapes"
-    //need to make the program run "slower" to allow viewers to see it
-    graph.createMap();
-  }
-  if (frameCount == 240) {
-    xS = new ArrayList <Integer>();
-    yS = new ArrayList <Integer>();
-    for (Integer x : graph.findCorner(type).keySet()) {
-      xS.add(x);
-    }
-    for (Integer y : graph.findCorner(type).values()) {
-      yS.add(y);
-    }
-  }
-  if (frameCount == 480) {
-    println(graph.findCorner(type));
-    if (type == 0) {
-      println("triangle");
-    } else if (type == 1) {
-      println("quadrilateral");
-    }
-    println(xS.size());
-    int numEdges = xS.size();
+  if (frameCount%300 == 0 && pass) {
+    background(50);
+    if (!collectedShapes.isEmpty()) {
+      temp = collectedShapes.remove();
+      println("start  " + (5-collectedShapes.size()));
+      coloredData();
+      vizShape();
+      graph.loadData(temp, colored); //make the "list" argument run off of "collectedShapes"
+      //need to make the program run "slower" to allow viewers to see it
+      graph.createMap();
 
-    println(numEdges);
+      xS = new ArrayList <Integer>();
+      yS = new ArrayList <Integer>();
+      type = temp.get(0).getType();
+
+      for (Integer x : graph.findCorner(type).keySet()) {
+        xS.add(x);
+      }
+      for (Integer y : graph.findCorner(type).values()) {
+        yS.add(y);
+      }
+    }
+  }
+
+
+  if (frameCount%320 == 0 && pass) {
+    if (!collectedShapes.isEmpty()) {
+
+      println(graph.findCorner(type));
+      if (type == 0) {
+        println("triangle");
+      } else if (type == 1) {
+        println("quadrilateral");
+      }
+      int numCorners = xS.size();
+
+      println("number of corners  " +numCorners);
+      xS.clear();
+      yS.clear();
+      numCorners = 0;
+      println("end");
+    }
+  }
+}
+
+void keyPressed() {
+  if (key == TAB) {
+    if (pass) {
+      //noLoop();
+      runtime = "pause";
+      pass = false;
+    } else if (!pass) {
+      //loop();
+      runtime = "play";
+      pass = true;
+    }
+    println(runtime);
   }
 }
 
@@ -87,7 +119,9 @@ void drawCoord() {
 }
 
 void vizShape() {
-  for (pix p : list) {
+  X = 2;
+  Y = 12;
+  for (pix p : temp) {
     p.filter();
     fill(p.getRed(), p.getGreen(), p.getBlue());
     if (Y < 600) {
@@ -127,7 +161,7 @@ void vizShape() {
 }
 
 void coloredData() { //organizes colored pixels
-  for (pix p : list) {
+  for (pix p : temp) {
     p.filter();
     if (p.getColor() != 0) {
       colored.add(p);
